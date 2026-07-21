@@ -84,10 +84,11 @@
     display:flex;
     gap:14px;
     overflow-x:auto;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: x mandatory;
     scroll-padding-left: 0px;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
     cursor: grab;
     user-select: none;
   }
@@ -521,9 +522,10 @@
   navPrev.addEventListener('click', () => scrollToSlide(Math.max(0, currentIndex() - 1)));
   navNext.addEventListener('click', () => scrollToSlide(Math.min(slides.length - 1, currentIndex() + 1)));
 
-  // Pointer-based drag scroll
+  // Drag pakai mouse (laptop). Di HP dibiarkan pakai scroll native yang lebih mulus.
   let isDown = false, startX = 0, startScroll = 0, moved = false;
   track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return;   // sentuhan/stylus -> scroll native
     isDown = true; moved = false;
     startX = e.clientX; startScroll = track.scrollLeft;
     track.classList.add('dragging'); track.setPointerCapture(e.pointerId);
